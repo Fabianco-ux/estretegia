@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import UploadButton from './UploadButton';
 import ChatMessageView from './ChatMessage';
 import { sendFile, sendText, ChatMessage } from './chatService';
+import { IS_LOCAL_AI } from '../../services/aiService';
 import { defaultStrategyMetrics, generateStrategy, StrategyTask } from './strategyBot';
 import { EXPERT_PROMPT } from './strategyPrompt';
 import TaskBoard, { TaskBoardItem, TaskStatus } from './TaskBoard';
@@ -89,6 +90,10 @@ export default function ChatWindow() {
   };
 
   const handleUpload = async (file: File) => {
+    if (IS_LOCAL_AI) {
+      setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'La IA local no soporta carga de archivos. Envía texto.', timestamp: Date.now() }]);
+      return;
+    }
     try {
       await sendFile(sessionId, file);
       setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'Archivo recibido y en análisis', timestamp: Date.now() }]);
