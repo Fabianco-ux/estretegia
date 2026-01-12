@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { isEmbedMode } from '../../utils/embed';
 
 export default function Sidebar() {
   const { pathname } = useLocation();
-  if (isEmbedMode()) return null;
   const itemClass = (path: string) => `block px-4 py-2 rounded ${pathname === path ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'}`;
 
   return (

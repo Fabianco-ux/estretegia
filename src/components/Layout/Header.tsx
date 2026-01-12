@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { isEmbedMode } from '../../utils/embed';
 
 interface HeaderProps {
   userName?: string;
@@ -9,7 +8,6 @@ interface HeaderProps {
 
 export default function Header({ userName, avatarUrl }: HeaderProps) {
   const { currentUser, logout } = useAuth();
-  if (isEmbedMode()) return null;
   const displayName = userName || currentUser?.displayName || currentUser?.email || undefined;
   const photo = avatarUrl || currentUser?.photoURL || undefined;
   return (

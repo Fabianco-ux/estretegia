@@ -5,7 +5,6 @@ import { useMetrics } from '../hooks/useMetrics';
 import { KPICard } from '../components/KPICard';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useAuth } from '../contexts/AuthContext';
-import { isEmbedMode } from '../utils/embed';
 
 export default function DashboardPage() {
   const { loading: authLoading } = useAuth();
@@ -69,9 +68,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className={isEmbedMode() ? "container flex py-0" : "container flex gap-6 py-6"}>
+      <div className="container flex gap-6 py-6">
         <Sidebar />
-        <main className={isEmbedMode() ? "flex-1 min-w-0 min-h-0" : "flex-1 min-w-0 min-h-0"}>
+        <main className="flex-1 min-w-0 min-h-0">
           <div className="flex items-center gap-3 mb-4">
             <label className="text-sm text-gray-600">Rango:</label>
             <select value={days} onChange={e => setDays(Number(e.target.value))} className="border rounded px-2 py-1">

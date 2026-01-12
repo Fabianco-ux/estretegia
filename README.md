@@ -146,35 +146,4 @@ firebase functions:secrets:set N8N_WEBHOOK_SECRET
 
 Las credenciales OAuth2 de LinkedIn (Client ID/Secret) permanecen en n8n para obtener y refrescar tokens. La Cloud Function no gestiona OAuth; solo recibe y almacena las métricas ya agregadas por n8n. Para firmar llamadas, usa `N8N_WEBHOOK_SECRET` (no el Client Secret de LinkedIn).
 
-## GitHub Pages (alternativo)
-
-Se agregó un workflow para desplegar automáticamente a GitHub Pages al hacer push a `main`.
-
-- Archivo: .github/workflows/deploy-gh-pages.yml
-- Construye con `BASE_PATH="/<repo>/"` y publica la carpeta `dist`.
-
-Pasos:
-
-1) En GitHub → Settings → Pages: selecciona "GitHub Actions" como fuente.
-2) Haz push a `main` (o usa "Run workflow").
-3) La URL quedará como: `https://<usuario>.github.io/<repo>/`.
-
-Notas:
-
-- El enrutado de React Router funciona con fallback SPA (archivo `public/404.html`).
-- Si publicas como página de usuario/organización (sin `<repo>`), cambia `BASE_PATH` a `/` en el paso de build del workflow.
-
-## Modo embebido (Google Sites)
-
-Para insertar el dashboard en Google Sites, usa la URL con el parámetro `?embed=1` para ocultar los cromos (Header/Sidebar) y optimizar el espacio.
-
-Ejemplos:
-
-- GH Pages: `https://<usuario>.github.io/<repo>/?embed=1` (y rutas como `.../dashboard?embed=1` o `.../chat?embed=1`).
-- Firebase Hosting: `https://<tu-sitio>.web.app/?embed=1`.
-
-Instrucciones en Google Sites:
-
-1) Insertar → Integrar → Pegar URL.
-2) Pega la URL con `?embed=1`.
-3) Ajusta dimensiones del iframe según necesidad.
+<!-- Sección de GitHub Pages y modo embebido removida -->
