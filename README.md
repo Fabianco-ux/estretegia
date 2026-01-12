@@ -9,6 +9,11 @@ Configura variables de entorno en `.env` (usa `.env.example` como referencia):
 ```
 VITE_N8N_BASE_URL=http://localhost:5678/webhook
 VITE_AI_BASE_URL=http://localhost:3001
+VITE_AI_PROVIDER=deepseek
+VITE_DEEPSEEK_BASE_URL=https://api.deepseek.com
+VITE_DEEPSEEK_MODEL=deepseek-chat
+# Coloca tu API Key de DeepSeek solo en .env local (no commitear)
+VITE_DEEPSEEK_API_KEY=REEMPLAZAR
 VITE_FIREBASE_API_KEY=REEMPLAZAR
 VITE_FIREBASE_AUTH_DOMAIN=REEMPLAZAR
 VITE_FIREBASE_PROJECT_ID=REEMPLAZAR

@@ -3,8 +3,6 @@ import UploadButton from './UploadButton';
 import ChatMessageView from './ChatMessage';
 import { sendFile, sendText, ChatMessage } from './chatService';
 import { IS_LOCAL_AI } from '../../services/aiService';
-import { defaultStrategyMetrics, generateStrategy, StrategyTask } from './strategyBot';
-import { EXPERT_PROMPT } from './strategyPrompt';
 import TaskBoard, { TaskBoardItem, TaskStatus } from './TaskBoard';
 import { useAuth } from '../../contexts/AuthContext';
 import { subscribeTasks, addTask, updateTask as updateTaskDoc, deleteTask as deleteTaskDoc } from '../../services/tasksService';
@@ -14,7 +12,7 @@ export default function ChatWindow() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [tasks, setTasks] = useState<TaskBoardItem[]>([]);
-  const [usePrompt, setUsePrompt] = useState(true);
+  // Chat simplificado sin prompt experto
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!currentUser) return;
@@ -51,20 +49,7 @@ export default function ChatWindow() {
     }
   }, [messages]);
 
-  // Primear la sesión con el prompt experto (una sola vez)
-  useEffect(() => {
-    const primedKey = `chat_prompt_primed_${sessionId}`;
-    const already = sessionStorage.getItem(primedKey);
-    if (usePrompt && !already) {
-      (async () => {
-        try {
-          await sendText(sessionId, EXPERT_PROMPT);
-          sessionStorage.setItem(primedKey, '1');
-          setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'Contexto experto aplicado. Comparte tus métricas o preguntas.', timestamp: Date.now() }]);
-        } catch {}
-      })();
-    }
-  }, [sessionId, usePrompt]);
+  // Sin prime: conversación directa con el proveedor configurado
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -72,8 +57,7 @@ export default function ChatWindow() {
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     try {
-      const payload = usePrompt ? `${EXPERT_PROMPT}\n\nEntrada\n${userMsg.content}` : userMsg.content;
-      const { message } = await sendText(sessionId, payload);
+      const { message } = await sendText(sessionId, userMsg.content);
       setMessages(prev => [...prev, message]);
     } catch (e) {
       setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'Error enviando mensaje', timestamp: Date.now() }]);
@@ -109,10 +93,6 @@ export default function ChatWindow() {
       <div className="flex items-center justify-between border-b p-2 bg-white">
         <div className="font-medium">Chat IA</div>
         <div className="flex items-center gap-2">
-          <label className="flex items-center gap-1 text-sm text-gray-700">
-            <input type="checkbox" checked={usePrompt} onChange={e => setUsePrompt(e.target.checked)} />
-            Usar prompt experto
-          </label>
           <button onClick={handleClearChat} className="px-2 py-1 text-sm rounded bg-green-700 text-white hover:bg-green-800">Limpiar Chat</button>
           <UploadButton onFileSelected={handleUpload} />
         </div>
