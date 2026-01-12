@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /linkedin_metrics/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /analytics_metrics/{docId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    // Tasks: permitir lectura/escritura a usuarios autenticados (incluye anónimos)
+    match /tasks/{taskId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.resource.data.ownerUid == request.auth.uid;
+    }
+  }
+}
